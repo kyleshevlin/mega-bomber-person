@@ -1,0 +1,30 @@
+{
+  "name": "mega-bomber-person",
+  "version": "1.0.0",
+  "description": "A clone of Mega Bomberman in JavaScript",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack -d --env.dev",
+    "start": "webpack-dev-server --env.dev --hot"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kyleshevlin/mega-bomber-person.git"
+  },
+  "author": "Kyle Shevlin <kyle.a.shevlin@gmail.com> (http://kyleshevlin.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kyleshevlin/mega-bomber-person/issues"
+  },
+  "homepage": "https://github.com/kyleshevlin/mega-bomber-person#readme",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.4",
+    "html-webpack-plugin": "^3.0.6",
+    "prettier": "^1.11.1",
+    "webpack": "^4.1.1",
+    "webpack-cli": "^2.0.11",
+    "webpack-dev-server": "^3.1.1"
+  }
+}
