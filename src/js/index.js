@@ -153,7 +153,7 @@ function draw() {
 
 function loop() {
   draw()
-  requestAnimationFrame(loop)
+  window.requestAnimationFrame(loop)
 }
 
 loop()
