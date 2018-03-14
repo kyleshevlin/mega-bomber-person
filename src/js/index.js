@@ -1,5 +1,6 @@
 import { CELL_SIZE } from './constants'
-import playerFactory from './player'
+import playerFactory from './players'
+import keyFactory from './keys'
 
 const canvas = document.getElementById('game')
 const ctx = canvas.getContext('2d')
@@ -42,10 +43,10 @@ const gridCollision = ({ x, y }) => {
       const gy = col * CELL_SIZE
 
       if (
-        x < gx + CELL_SIZE &&
-        x + CELL_SIZE > gx &&
-        y < gy + CELL_SIZE &&
-        y + CELL_SIZE > gy
+        x < gx + character.width &&
+        x + character.width > gx &&
+        y < gy + character.height &&
+        y + character.height > gy
       ) {
         collision = true
       }
@@ -55,67 +56,70 @@ const gridCollision = ({ x, y }) => {
   return collision
 }
 
-// Needs logic to say we can't move through a certain point/wall
-const movement = event => {
-  const { speed, x, y } = character
+const aKey = keyFactory('a')
+const sKey = keyFactory('s')
+const dKey = keyFactory('d')
+const wKey = keyFactory('w')
+const arrowLeftKey = keyFactory('ArrowLeft')
+const arrowDownKey = keyFactory('ArrowDown')
+const arrowRightKey = keyFactory('ArrowRight')
+const arrowUpKey = keyFactory('ArrowUp')
 
+const handleKeyDown = event => {
   switch (event.key) {
     case 'a':
-    case 'ArrowLeft': {
-      if (x !== 0) {
-        const nextPos = {
-          x: x - speed,
-          y
-        }
-
-        if (!gridCollision(nextPos)) {
-          character.x -= speed
-        }
-      }
+    case 'ArrowLeft':
+      aKey.pressed = true
+      arrowLeftKey.pressed = true
       break
-    }
 
     case 's':
-    case 'ArrowDown': {
-      if (y !== canvas.height - CELL_SIZE) {
-        const nextPos = {
-          x,
-          y: y + speed
-        }
-
-        if (!gridCollision(nextPos)) {
-          character.y += speed
-        }
-      }
+    case 'ArrowDown':
+      sKey.pressed = true
+      arrowDownKey.pressed = true
       break
-    }
 
     case 'd':
     case 'ArrowRight':
-      if (x !== canvas.width - CELL_SIZE) {
-        const nextPos = {
-          x: x + speed,
-          y
-        }
-
-        if (!gridCollision(nextPos)) {
-          character.x += speed
-        }
-      }
+      dKey.pressed = true
+      arrowRightKey.pressed = true
       break
 
     case 'w':
     case 'ArrowUp':
-      if (y !== 0) {
-        const nextPos = {
-          x,
-          y: y - speed
-        }
+      wKey.pressed = true
+      arrowUpKey.pressed = true
+      break
 
-        if (!gridCollision(nextPos)) {
-          character.y -= speed
-        }
-      }
+    default:
+      break
+  }
+}
+
+const handleKeyUp = event => {
+  switch (event.key) {
+    case 'a':
+    case 'ArrowLeft':
+      aKey.pressed = false
+      arrowLeftKey.pressed = false
+      break
+
+    case 's':
+    case 'ArrowDown':
+      sKey.pressed = false
+      arrowDownKey.pressed = false
+      break
+
+    case 'd':
+    case 'ArrowRight':
+      dKey.pressed = false
+      arrowRightKey.pressed = false
+      break
+
+    case 'w':
+    case 'ArrowUp':
+      wKey.pressed = false
+      arrowUpKey.pressed = false
       break
 
     default:
@@ -124,7 +128,53 @@ const movement = event => {
 }
 
 // Event Listeners
-document.addEventListener('keydown', movement)
+document.addEventListener('keydown', handleKeyDown)
+document.addEventListener('keyup', handleKeyUp)
+
+const nextPos = ({ speed, x, y }, operator) => {
+  switch (operator) {
+    case 'subX':
+      return { x: x - speed, y }
+
+    case 'addY':
+      return { x, y: y + speed }
+
+    case 'addX':
+      return { x: x + speed, y }
+
+    case 'subY':
+      return { x, y: y - speed }
+
+    default:
+      break
+  }
+}
+
+const characterMovement = () => {
+  if (aKey.pressed || arrowLeftKey.pressed) {
+    if (!gridCollision(nextPos(character, 'subX'))) {
+      character.x -= character.speed
+    }
+  }
+
+  if (sKey.pressed || arrowDownKey.pressed) {
+    if (!gridCollision(nextPos(character, 'addY'))) {
+      character.y += character.speed
+    }
+  }
+
+  if (dKey.pressed || arrowRightKey.pressed) {
+    if (!gridCollision(nextPos(character, 'addX'))) {
+      character.x += character.speed
+    }
+  }
+
+  if (wKey.pressed || arrowUpKey.pressed) {
+    if (!gridCollision(nextPos(character, 'subY'))) {
+      character.y -= character.speed
+    }
+  }
+}
 
 function draw() {
   // Background
@@ -148,6 +198,7 @@ function draw() {
 
   // Character
   ctx.fillStyle = character.background
+  characterMovement()
   ctx.fillRect(character.x, character.y, character.width, character.height)
 }
 
