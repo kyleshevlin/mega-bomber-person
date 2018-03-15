@@ -1,191 +1,88 @@
 import { CELL_SIZE } from './constants'
 import playerFactory from './players'
 import keyFactory from './keys'
+import { handleKeyDown, handleKeyUp } from './events'
 
 const canvas = document.getElementById('game')
 const ctx = canvas.getContext('2d')
 
 const grid = [
-  [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+  [' ', ' ', 'c', 'c', 'c', 'c', 'c', ' ', ' '],
   [' ', 'x', ' ', 'x', ' ', 'x', ' ', 'x', ' '],
-  [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+  ['c', ' ', 'c', ' ', 'c', ' ', 'c', ' ', 'c'],
+  ['c', 'x', 'c', 'x', 'c', 'x', 'c', 'x', 'c'],
+  ['c', ' ', 'c', ' ', 'c', ' ', 'c', ' ', 'c'],
+  ['c', 'x', 'c', 'x', 'c', 'x', 'c', 'x', 'c'],
+  ['c', ' ', 'c', ' ', 'c', ' ', 'c', ' ', 'c'],
   [' ', 'x', ' ', 'x', ' ', 'x', ' ', 'x', ' '],
-  [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-  [' ', 'x', ' ', 'x', ' ', 'x', ' ', 'x', ' '],
-  [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-  [' ', 'x', ' ', 'x', ' ', 'x', ' ', 'x', ' '],
-  [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']
+  [' ', ' ', 'c', 'c', 'c', 'c', 'c', ' ', ' ']
 ]
 
-canvas.width = CELL_SIZE * grid.length
-canvas.height = CELL_SIZE * grid[0].length
+const GRID_WIDTH = CELL_SIZE * grid.length
+const GRID_HEIGHT = CELL_SIZE * grid[0].length
 
-const character = playerFactory()
+canvas.width = GRID_WIDTH
+canvas.height = GRID_HEIGHT
 
-const gridCollision = ({ x, y }) => {
-  const rowLength = grid.length
-  let collision = false
-  let row, col
+const player1 = playerFactory({ name: 'Player 1' })
+const players = [player1]
 
-  for (row = 0; row < rowLength; row++) {
-    const colLength = grid[row].length
-
-    for (col = 0; col < colLength; col++) {
-      if (collision) {
-        break
-      }
-
-      if (grid[row][col] !== 'x') {
-        continue
-      }
-
-      const gx = row * CELL_SIZE
-      const gy = col * CELL_SIZE
-
-      if (
-        x < gx + character.width &&
-        x + character.width > gx &&
-        y < gy + character.height &&
-        y + character.height > gy
-      ) {
-        collision = true
-      }
-    }
-  }
-
-  return collision
-}
-
-const aKey = keyFactory('a')
-const sKey = keyFactory('s')
-const dKey = keyFactory('d')
-const wKey = keyFactory('w')
+// Keys
 const arrowLeftKey = keyFactory('ArrowLeft')
 const arrowDownKey = keyFactory('ArrowDown')
 const arrowRightKey = keyFactory('ArrowRight')
 const arrowUpKey = keyFactory('ArrowUp')
-
-const handleKeyDown = event => {
-  switch (event.key) {
-    case 'a':
-    case 'ArrowLeft':
-      aKey.pressed = true
-      arrowLeftKey.pressed = true
-      break
-
-    case 's':
-    case 'ArrowDown':
-      sKey.pressed = true
-      arrowDownKey.pressed = true
-      break
-
-    case 'd':
-    case 'ArrowRight':
-      dKey.pressed = true
-      arrowRightKey.pressed = true
-      break
-
-    case 'w':
-    case 'ArrowUp':
-      wKey.pressed = true
-      arrowUpKey.pressed = true
-      break
-
-    default:
-      break
-  }
-}
-
-const handleKeyUp = event => {
-  switch (event.key) {
-    case 'a':
-    case 'ArrowLeft':
-      aKey.pressed = false
-      arrowLeftKey.pressed = false
-      break
-
-    case 's':
-    case 'ArrowDown':
-      sKey.pressed = false
-      arrowDownKey.pressed = false
-      break
-
-    case 'd':
-    case 'ArrowRight':
-      dKey.pressed = false
-      arrowRightKey.pressed = false
-      break
-
-    case 'w':
-    case 'ArrowUp':
-      wKey.pressed = false
-      arrowUpKey.pressed = false
-      break
-
-    default:
-      break
-  }
+const keys = {
+  ArrowLeft: arrowLeftKey,
+  ArrowDown: arrowDownKey,
+  ArrowRight: arrowRightKey,
+  ArrowUp: arrowUpKey
 }
 
 // Event Listeners
-document.addEventListener('keydown', handleKeyDown)
-document.addEventListener('keyup', handleKeyUp)
+document.addEventListener('keydown', handleKeyDown(keys))
+document.addEventListener('keyup', handleKeyUp(keys))
 
-const nextPos = ({ speed, x, y }, operator) => {
-  switch (operator) {
-    case 'subX':
-      return { x: x - speed, y }
+const playerMovement = player => {
+  if (arrowLeftKey.pressed) {
+    player.moveLeft()
+  }
 
-    case 'addY':
-      return { x, y: y + speed }
+  if (arrowDownKey.pressed) {
+    player.moveDown()
+  }
 
-    case 'addX':
-      return { x: x + speed, y }
+  if (arrowRightKey.pressed) {
+    player.moveRight()
+  }
 
-    case 'subY':
-      return { x, y: y - speed }
-
-    default:
-      break
+  if (arrowUpKey.pressed) {
+    player.moveUp()
   }
 }
 
-const characterMovement = () => {
-  if (aKey.pressed || arrowLeftKey.pressed) {
-    if (!gridCollision(nextPos(character, 'subX'))) {
-      character.x -= character.speed
-    }
-  }
-
-  if (sKey.pressed || arrowDownKey.pressed) {
-    if (!gridCollision(nextPos(character, 'addY'))) {
-      character.y += character.speed
-    }
-  }
-
-  if (dKey.pressed || arrowRightKey.pressed) {
-    if (!gridCollision(nextPos(character, 'addX'))) {
-      character.x += character.speed
-    }
-  }
-
-  if (wKey.pressed || arrowUpKey.pressed) {
-    if (!gridCollision(nextPos(character, 'subY'))) {
-      character.y -= character.speed
-    }
-  }
-}
-
-function draw() {
-  // Background
+function drawBackground(ctx) {
   ctx.fillStyle = 'green'
-  ctx.fillRect(0, 0, canvas.width, canvas.height)
+  ctx.fillRect(0, 0, GRID_WIDTH, GRID_HEIGHT)
+}
 
-  // Impassible objects O(m*n)
+function drawGrid(ctx, grid) {
   grid.forEach((row, rowIndex) => {
     row.forEach((col, colIndex) => {
-      if (col === 'x') {
-        ctx.fillStyle = 'gray'
+      switch (col) {
+        case 'c':
+          ctx.fillStyle = 'tan'
+          break
+
+        case 'x':
+          ctx.fillStyle = 'gray'
+          break
+
+        default:
+          break
+      }
+
+      if (col !== ' ') {
         ctx.fillRect(
           rowIndex * CELL_SIZE,
           colIndex * CELL_SIZE,
@@ -195,11 +92,21 @@ function draw() {
       }
     })
   })
+}
 
-  // Character
-  ctx.fillStyle = character.background
-  characterMovement()
-  ctx.fillRect(character.x, character.y, character.width, character.height)
+function drawPlayer(ctx, player) {
+  ctx.fillStyle = player.background
+  playerMovement(player)
+  ctx.fillRect(player.x, player.y, player.width, player.height)
+}
+
+function draw() {
+  drawBackground(ctx)
+  drawGrid(ctx, grid)
+
+  players.forEach(player => {
+    drawPlayer(ctx, player)
+  })
 }
 
 function loop() {
