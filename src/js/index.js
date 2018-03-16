@@ -1,5 +1,5 @@
 import { CELL_SIZE } from './constants'
-import playerFactory from './players'
+import playerFactory from './factories/player'
 import keyFactory from './keys'
 import { handleKeyDown, handleKeyUp } from './events'
 
@@ -62,6 +62,7 @@ const playerMovement = player => {
 }
 
 function drawBackground(ctx) {
+  ctx.clearRect(0, 0, GRID_WIDTH, GRID_HEIGHT)
   ctx.fillStyle = 'green'
   ctx.fillRect(0, 0, GRID_WIDTH, GRID_HEIGHT)
 }
@@ -97,7 +98,12 @@ function drawGrid(ctx, grid) {
 function drawPlayer(ctx, player) {
   ctx.fillStyle = player.background
   playerMovement(player)
-  ctx.fillRect(player.x, player.y, player.width, player.height)
+  ctx.fillRect(
+    player.position.x,
+    player.position.y,
+    player.width,
+    player.height
+  )
 }
 
 function draw() {
