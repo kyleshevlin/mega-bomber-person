@@ -17,7 +17,7 @@ const playerFactory = ({ name, x = 0, y = 0 }) => {
     state,
     liverFactory(),
     moverFactory({ x, y, speed: 3 }),
-    bomberFactory()
+    bomberFactory(state)
   )
 }
 

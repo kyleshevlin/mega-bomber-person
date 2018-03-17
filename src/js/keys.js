@@ -1,5 +1,5 @@
-const keyFactory = name => ({
-  name,
+const keyFactory = code => ({
+  code,
   pressed: false
 })
 

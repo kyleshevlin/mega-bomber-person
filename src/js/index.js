@@ -28,22 +28,27 @@ const player1 = playerFactory({ name: 'Player 1' })
 const players = [player1]
 
 // Keys
-const arrowLeftKey = keyFactory('ArrowLeft')
-const arrowDownKey = keyFactory('ArrowDown')
-const arrowRightKey = keyFactory('ArrowRight')
-const arrowUpKey = keyFactory('ArrowUp')
-const keys = {
-  ArrowLeft: arrowLeftKey,
-  ArrowDown: arrowDownKey,
-  ArrowRight: arrowRightKey,
-  ArrowUp: arrowUpKey
-}
+const arrowLeftKey = keyFactory(37)
+const arrowUpKey = keyFactory(38)
+const arrowRightKey = keyFactory(39)
+const arrowDownKey = keyFactory(40)
+const spaceBar = keyFactory(32)
+const keys = [
+  arrowLeftKey,
+  arrowUpKey,
+  arrowRightKey,
+  arrowDownKey,
+  spaceBar
+].reduce((acc, cur) => {
+  acc[cur.code] = cur
+  return acc
+}, {})
 
 // Event Listeners
 document.addEventListener('keydown', handleKeyDown(keys))
 document.addEventListener('keyup', handleKeyUp(keys))
 
-const playerMovement = player => {
+const playerActions = player => {
   if (arrowLeftKey.pressed) {
     player.moveLeft()
   }
@@ -58,6 +63,10 @@ const playerMovement = player => {
 
   if (arrowUpKey.pressed) {
     player.moveUp()
+  }
+
+  if (spaceBar.pressed) {
+    player.dropBomb()
   }
 }
 
@@ -97,7 +106,7 @@ function drawGrid(ctx, grid) {
 
 function drawPlayer(ctx, player) {
   ctx.fillStyle = player.background
-  playerMovement(player)
+  playerActions(player)
   ctx.fillRect(
     player.position.x,
     player.position.y,

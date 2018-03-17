@@ -1,11 +1,11 @@
 export const handleKeyDown = keys => event => {
-  if (keys[event.key]) {
-    keys[event.key].pressed = true
+  if (keys[event.keyCode]) {
+    keys[event.keyCode].pressed = true
   }
 }
 
 export const handleKeyUp = keys => event => {
-  if (keys[event.key]) {
-    keys[event.key].pressed = false
+  if (keys[event.keyCode]) {
+    keys[event.keyCode].pressed = false
   }
 }
