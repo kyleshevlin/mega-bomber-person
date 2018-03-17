@@ -20,7 +20,7 @@ const bombFactory = entity => {
     }, state.fuse)
   }
 
-  return Object.assign({}, state, {
+  return Object.assign(state, {
     detonate,
     plant
   })

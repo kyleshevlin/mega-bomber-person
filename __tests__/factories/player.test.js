@@ -1,4 +1,4 @@
-import playerFactory from '../src/js/factories/player'
+import playerFactory from '../../src/js/factories/player'
 
 describe('Player', () => {
   it('should should have the right name', () => {

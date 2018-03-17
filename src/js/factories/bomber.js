@@ -30,7 +30,7 @@ const bomberFactory = entity => {
     }
   }
 
-  return Object.assign({}, state, {
+  return Object.assign(state, {
     dropBomb,
     incrementBombMax,
     replenishBomb
