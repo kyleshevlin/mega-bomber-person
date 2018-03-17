@@ -2,6 +2,9 @@ import { CELL_SIZE } from './constants'
 import keyFactory from './factories/key'
 import playerFactory from './factories/player'
 import { handleKeyDown, handleKeyUp } from './events'
+import drawBackground from './draws/background'
+import drawGrid from './draws/grid'
+import drawPlayer from './draws/player'
 
 const canvas = document.getElementById('game')
 const ctx = canvas.getContext('2d')
@@ -70,62 +73,18 @@ const playerActions = player => {
   }
 }
 
-function drawBackground(ctx) {
-  ctx.clearRect(0, 0, GRID_WIDTH, GRID_HEIGHT)
-  ctx.fillStyle = 'green'
-  ctx.fillRect(0, 0, GRID_WIDTH, GRID_HEIGHT)
-}
-
-function drawGrid(ctx, grid) {
-  grid.forEach((row, rowIndex) => {
-    row.forEach((col, colIndex) => {
-      switch (col) {
-        case 'c':
-          ctx.fillStyle = 'tan'
-          break
-
-        case 'x':
-          ctx.fillStyle = 'gray'
-          break
-
-        default:
-          break
-      }
-
-      if (col !== ' ') {
-        ctx.fillRect(
-          rowIndex * CELL_SIZE,
-          colIndex * CELL_SIZE,
-          CELL_SIZE,
-          CELL_SIZE
-        )
-      }
-    })
-  })
-}
-
-function drawPlayer(ctx, player) {
-  ctx.fillStyle = player.background
-  playerActions(player)
-  ctx.fillRect(
-    player.position.x,
-    player.position.y,
-    player.width,
-    player.height
-  )
-}
-
-function draw() {
-  drawBackground(ctx)
+function update() {
+  drawBackground(ctx, GRID_WIDTH, GRID_HEIGHT)
   drawGrid(ctx, grid)
 
   players.forEach(player => {
+    playerActions(player)
     drawPlayer(ctx, player)
   })
 }
 
 function loop() {
-  draw()
+  update()
   window.requestAnimationFrame(loop)
 }
 
