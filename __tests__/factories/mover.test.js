@@ -47,4 +47,19 @@ describe('Mover', () => {
     mover.moveDown()
     expect(mover.position.y).toEqual(startingY + mover.speed)
   })
+
+  it('adjust', () => {
+    const startingX = mover.position.x
+    const startingY = mover.position.y
+
+    mover.adjust(2, 3)
+
+    expect(mover.position.x).toEqual(2)
+    expect(mover.position.y).toEqual(3)
+
+    mover.adjust(-2, -3)
+
+    expect(mover.position.x).toEqual(0)
+    expect(mover.position.y).toEqual(0)
+  })
 })
