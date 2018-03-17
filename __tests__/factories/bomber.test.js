@@ -4,7 +4,7 @@ describe('Bomber', () => {
   let bomber
 
   beforeEach(() => {
-    bomber = bomberFactory()
+    bomber = bomberFactory({ position: { x: 0, y: 0 }})
   })
 
   it('should start with 1 bomb', () => {
@@ -15,6 +15,9 @@ describe('Bomber', () => {
     const startingBombCount = bomber.bombs.count
 
     expect(startingBombCount).toEqual(1)
+
+    bomber.dropBomb()
+    expect(bomber.bombs.count).toEqual(0)
 
     bomber.dropBomb()
     expect(bomber.bombs.count).toEqual(0)

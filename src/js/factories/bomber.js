@@ -1,24 +1,40 @@
-function bomberFactory() {
-  return {
+const bomberFactory = entity => {
+  const state = {
     bombs: {
       count: 1,
       max: 1
-    },
-    incrementBombMax() {
-      this.bombs.max++
-    },
-    dropBomb() {
-      console.log('A bomb was dropped!')
-      this.bombs.count--
-    },
-    replenishBomb() {
-      const { count, max } = this.bombs
-
-      if (count < max) {
-        this.bombs.count++
-      }
     }
   }
+
+  const incrementBombMax = () => {
+    state.bombs.max++
+  }
+
+  const dropBomb = () => {
+    if (state.bombs.count > 0) {
+      console.log(
+        `A bomb as dropped at coordinates: ${entity.position.x}, ${entity
+          .position.y}`
+      )
+      state.bombs.count--
+      // This will be made better
+      setTimeout(() => {
+        replenishBomb()
+      }, 3000)
+    }
+  }
+
+  const replenishBomb = () => {
+    if (state.bombs.count < state.bombs.max) {
+      state.bombs.count++
+    }
+  }
+
+  return Object.assign({}, state, {
+    dropBomb,
+    incrementBombMax,
+    replenishBomb
+  })
 }
 
 export default bomberFactory
