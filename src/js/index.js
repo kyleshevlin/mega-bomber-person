@@ -1,6 +1,6 @@
 import { CELL_SIZE } from './constants'
+import keyFactory from './factories/key'
 import playerFactory from './factories/player'
-import keyFactory from './keys'
 import { handleKeyDown, handleKeyUp } from './events'
 
 const canvas = document.getElementById('game')
