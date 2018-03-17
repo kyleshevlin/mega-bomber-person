@@ -7,7 +7,7 @@ const moverFactory = ({ speed = 1, x = 0, y = 0 }) => {
     speed
   }
 
-  const adjust = (x, y) => {
+  const adjust = (x = 0, y = 0) => {
     state.position.x += x
     state.position.y += y
   }

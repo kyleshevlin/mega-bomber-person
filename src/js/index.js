@@ -73,12 +73,53 @@ const playerActions = player => {
   }
 }
 
+const edgeCollision = player => {
+  const { height, width, position: { x, y } } = player
+  const edge = { x: 0, y: 0, width: GRID_WIDTH, height: GRID_HEIGHT }
+
+  if (
+    x < edge.x ||
+    y < edge.y ||
+    x + width > edge.width ||
+    y + height > edge.height
+  ) {
+    // Collision detected, adjust player
+    let xAdj
+    let yAdj
+
+    if (x < edge.x) {
+      xAdj = edge.x - x
+    }
+
+    if (y < edge.y) {
+      yAdj = edge.y - y
+    }
+
+    if (x + width > edge.width) {
+      xAdj = edge.width - (x + width)
+    }
+
+    if (y + height > edge.height) {
+      yAdj = edge.height - (y + height)
+    }
+
+    player.adjust(xAdj, yAdj)
+  }
+}
+
 function update() {
+  // Calculate positions
+  players.forEach(playerActions)
+
+  // Calculate Collisions
+  players.forEach(edgeCollision)
+
+  // Adjust in response to collisions
+
+  // Draw
   drawBackground(ctx, GRID_WIDTH, GRID_HEIGHT)
   drawGrid(ctx, grid)
-
   players.forEach(player => {
-    playerActions(player)
     drawPlayer(ctx, player)
   })
 }
