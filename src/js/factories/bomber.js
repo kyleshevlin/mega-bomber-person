@@ -12,10 +12,7 @@ const bomberFactory = entity => {
 
   const dropBomb = () => {
     if (state.bombs.count > 0) {
-      console.log(
-        `A bomb as dropped at coordinates: ${entity.position.x}, ${entity
-          .position.y}`
-      )
+      console.log(`A bomb as dropped at coordinates: ${entity.x}, ${entity.y}`)
       state.bombs.count--
       // This will be made better
       setTimeout(() => {

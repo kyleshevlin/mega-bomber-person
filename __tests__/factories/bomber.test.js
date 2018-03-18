@@ -4,7 +4,7 @@ describe('Bomber', () => {
   let bomber
 
   beforeEach(() => {
-    bomber = bomberFactory({ position: { x: 0, y: 0 }})
+    bomber = bomberFactory({ x: 0, y: 0 })
   })
 
   it('should start with 1 bomb', () => {

@@ -73,38 +73,81 @@ const playerActions = player => {
   }
 }
 
+const collision = box1 => box2 =>
+  box1.x < box2.x + box2.width &&
+  box1.x + box1.width > box2.x &&
+  box1.y < box2.y + box2.height &&
+  box1.y + box1.height > box2.y
+
 const edgeCollision = player => {
   const { height, width, position: { x, y } } = player
   const edge = { x: 0, y: 0, width: GRID_WIDTH, height: GRID_HEIGHT }
 
-  if (
-    x < edge.x ||
-    y < edge.y ||
-    x + width > edge.width ||
-    y + height > edge.height
-  ) {
-    // Collision detected, adjust player
-    let xAdj
-    let yAdj
+  if (collision({ height, width, x, y })(edge)) {
+    let xPos
+    let yPos
 
-    if (x < edge.x) {
-      xAdj = edge.x - x
+    if (x < 0) {
+      xPos = 0
     }
 
-    if (y < edge.y) {
-      yAdj = edge.y - y
+    if (y < 0) {
+      yPos = 0
     }
 
-    if (x + width > edge.width) {
-      xAdj = edge.width - (x + width)
+    if (x + width > GRID_WIDTH) {
+      xPos = GRID_WIDTH
     }
 
-    if (y + height > edge.height) {
-      yAdj = edge.height - (y + height)
+    if (y + height > GRID_HEIGHT) {
+      yPos = GRID_HEIGHT
     }
 
-    player.adjust(xAdj, yAdj)
+    player.reposition(xPos, yPos)
   }
+
+  return player
+}
+
+const gridCollision = (grid, player) => {
+  const { height, width, position: { x, y } } = player
+  const playerCollision = collision({ height, width, x, y })
+
+  let rowIndex = -1
+  let colIndex = -1
+  const hasCollision = grid.some(row => {
+    rowIndex++
+    colIndex = -1
+
+    return row.some(col => {
+      colIndex++
+
+      if (grid[rowIndex][colIndex] === ' ') {
+        return false
+      } else {
+        return playerCollision({
+          height: CELL_SIZE,
+          width: CELL_SIZE,
+          x: rowIndex * CELL_SIZE,
+          y: colIndex * CELL_SIZE
+        })
+      }
+    })
+  })
+
+  if (hasCollision) {
+    const box = {
+      height: CELL_SIZE,
+      width: CELL_SIZE,
+      x: rowIndex * CELL_SIZE,
+      y: colIndex * CELL_SIZE
+    }
+
+    console.log('box', box)
+    console.log('player', { height, width, x, y })
+  }
+
+  return player
 }
 
 function update() {
@@ -112,7 +155,9 @@ function update() {
   players.forEach(playerActions)
 
   // Calculate Collisions
-  players.forEach(edgeCollision)
+  players.forEach(player => {
+    gridCollision(grid, edgeCollision(player))
+  })
 
   // Adjust in response to collisions
 

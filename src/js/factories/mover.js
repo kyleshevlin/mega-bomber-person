@@ -1,3 +1,5 @@
+import { isNothing } from '../utils'
+
 const moverFactory = ({ speed = 1, x = 0, y = 0 }) => {
   const state = {
     position: {
@@ -5,11 +7,6 @@ const moverFactory = ({ speed = 1, x = 0, y = 0 }) => {
       y
     },
     speed
-  }
-
-  const adjust = (x = 0, y = 0) => {
-    state.position.x += x
-    state.position.y += y
   }
 
   const moveLeft = () => {
@@ -28,7 +25,23 @@ const moverFactory = ({ speed = 1, x = 0, y = 0 }) => {
     state.position.y += state.speed
   }
 
-  return Object.assign(state, { adjust, moveLeft, moveRight, moveUp, moveDown })
+  const reposition = (x, y) => {
+    if (!isNothing(x)) {
+      state.position.x = x
+    }
+
+    if (!isNothing(y)) {
+      state.position.y = y
+    }
+  }
+
+  return Object.assign(state, {
+    moveLeft,
+    moveRight,
+    moveUp,
+    moveDown,
+    reposition
+  })
 }
 
 export default moverFactory

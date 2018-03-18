@@ -1,10 +1,33 @@
 import playerFactory from '../../src/js/factories/player'
 
 describe('Player', () => {
-  it('should should have the right name', () => {
-    const name = 'Foo Bar'
-    const player = playerFactory({ name })
+  let player
 
-    expect(player.name).toEqual(name)
+  beforeEach(() => {
+    player = playerFactory({ name: 'Test Player' })
+  })
+
+  it('should should have the right name', () => {
+    expect(player.name).toEqual('Test Player')
+  })
+
+  it('should moveLeft', () => {
+    player.moveLeft()
+    expect(player.position.x).toEqual(0 - player.speed)
+  })
+
+  it('should moveRight', () => {
+    player.moveRight()
+    expect(player.position.x).toEqual(0 + player.speed)
+  })
+
+  it('should moveUp', () => {
+    player.moveUp()
+    expect(player.position.y).toEqual(0 - player.speed)
+  })
+
+  it('should moveDown', () => {
+    player.moveDown()
+    expect(player.position.y).toEqual(0 + player.speed)
   })
 })

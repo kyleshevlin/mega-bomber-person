@@ -48,19 +48,25 @@ describe('Mover', () => {
     expect(mover.position.y).toEqual(startingY + mover.speed)
   })
 
-  it('adjust', () => {
-    mover.adjust(2, 3)
-
+  it('reposition', () => {
+    mover.reposition(2, 3)
     expect(mover.position.x).toEqual(2)
     expect(mover.position.y).toEqual(3)
 
-    mover.adjust(-2, -3)
+    mover.reposition(-2, -3)
+    expect(mover.position.x).toEqual(-2)
+    expect(mover.position.y).toEqual(-3)
 
-    expect(mover.position.x).toEqual(0)
+    // Should do nothing
+    mover.reposition()
+    expect(mover.position.x).toEqual(-2)
+    expect(mover.position.y).toEqual(-3)
+
+    mover.reposition(null, 0)
+    expect(mover.position.x).toEqual(-2)
     expect(mover.position.y).toEqual(0)
 
-    mover.adjust() // tests default values
-
+    mover.reposition(0)
     expect(mover.position.x).toEqual(0)
     expect(mover.position.y).toEqual(0)
   })
