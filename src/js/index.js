@@ -1,7 +1,6 @@
 import { CELL_SIZE } from './constants'
-import keyFactory from './factories/key'
+import { keys, addKeyListeners } from './shared/keys'
 import playerFactory from './factories/player'
-import { handleKeyDown, handleKeyUp } from './events'
 import drawBackground from './draws/background'
 import drawGrid from './draws/grid'
 import drawPlayer from './draws/player'
@@ -30,45 +29,27 @@ canvas.height = GRID_HEIGHT
 const player1 = playerFactory({ name: 'Player 1' })
 const players = [player1]
 
-// Keys
-const arrowLeftKey = keyFactory(37)
-const arrowUpKey = keyFactory(38)
-const arrowRightKey = keyFactory(39)
-const arrowDownKey = keyFactory(40)
-const spaceBar = keyFactory(32)
-const keys = [
-  arrowLeftKey,
-  arrowUpKey,
-  arrowRightKey,
-  arrowDownKey,
-  spaceBar
-].reduce((acc, cur) => {
-  acc[cur.code] = cur
-  return acc
-}, {})
-
 // Event Listeners
-document.addEventListener('keydown', handleKeyDown(keys))
-document.addEventListener('keyup', handleKeyUp(keys))
+addKeyListeners()
 
 const playerActions = player => {
-  if (arrowLeftKey.pressed) {
+  if (keys.left.pressed) {
     player.moveLeft()
   }
 
-  if (arrowDownKey.pressed) {
+  if (keys.down.pressed) {
     player.moveDown()
   }
 
-  if (arrowRightKey.pressed) {
+  if (keys.right.pressed) {
     player.moveRight()
   }
 
-  if (arrowUpKey.pressed) {
+  if (keys.up.pressed) {
     player.moveUp()
   }
 
-  if (spaceBar.pressed) {
+  if (keys.spacebar.pressed) {
     player.dropBomb()
   }
 }
