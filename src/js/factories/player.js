@@ -5,7 +5,9 @@ import moverFactory from './mover'
 
 const PLAYER_SIZE = CELL_SIZE - 10
 
-const playerFactory = ({ name, speed = 3, x = 0, y = 0 }) => {
+const playerFactory = (options = {}) => {
+  const { name, velocity = 3, x = 0, y = 0 } = options
+
   const state = {
     background: 'red',
     height: PLAYER_SIZE,
@@ -15,8 +17,8 @@ const playerFactory = ({ name, speed = 3, x = 0, y = 0 }) => {
 
   return Object.assign(
     state,
-    liverFactory(),
-    moverFactory({ speed: 3, x, y }),
+    liverFactory({}),
+    moverFactory({ velocity, x, y }),
     bomberFactory(state)
   )
 }

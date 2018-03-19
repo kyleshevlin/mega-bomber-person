@@ -23,4 +23,14 @@ describe('Liver', () => {
     liver.revive()
     expect(liver.alive).toEqual(true)
   })
+
+  it('should increment health', () => {
+    liver.incrementHealth()
+    expect(liver.health).toEqual(4)
+  })
+
+  it('should decrement health', () => {
+    liver.decrementHealth()
+    expect(liver.health).toEqual(2)
+  })
 })

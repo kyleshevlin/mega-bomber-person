@@ -1,28 +1,30 @@
 import { isNothing } from '../utils'
 
-const moverFactory = ({ speed = 1, x = 0, y = 0 }) => {
+const moverFactory = (options = {}) => {
+  const { velocity = 1, x = 0, y = 0 } = options
+
   const state = {
     position: {
       x,
       y
     },
-    speed
+    velocity
   }
 
   const moveLeft = () => {
-    state.position.x -= state.speed
+    state.position.x -= state.velocity
   }
 
   const moveRight = () => {
-    state.position.x += state.speed
+    state.position.x += state.velocity
   }
 
   const moveUp = () => {
-    state.position.y -= state.speed
+    state.position.y -= state.velocity
   }
 
   const moveDown = () => {
-    state.position.y += state.speed
+    state.position.y += state.velocity
   }
 
   const reposition = (x, y) => {

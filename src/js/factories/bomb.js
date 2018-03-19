@@ -1,5 +1,6 @@
-const bombFactory = entity => {
+const bombFactory = bomber => {
   const state = {
+    autoDetonate: true,
     background: 'black',
     blastRadius: 1,
     fuse: 3000,
@@ -9,20 +10,40 @@ const bombFactory = entity => {
 
   const detonate = () => {
     console.log('Boom 💥')
+    bomber.replenishBomb()
   }
 
   const plant = () => {
-    entity.dropBomb()
+    if (state.autoDetonate) {
+      setTimeout(() => {
+        detonate()
+      }, state.fuse)
+    }
+  }
 
-    setTimeout(() => {
-      detonate()
-      entity.addBomb()
-    }, state.fuse)
+  const decrementBlastRadius = () => {
+    state.blastRadius--
+  }
+
+  const incrementBlastRadius = () => {
+    state.blastRadius++
+  }
+
+  const toggleAutoDetonation = () => {
+    state.autoDetonate = !state.autoDetonate
+  }
+
+  const updateFuse = time => {
+    state.fuse = time
   }
 
   return Object.assign(state, {
+    decrementBlastRadius,
     detonate,
-    plant
+    incrementBlastRadius,
+    plant,
+    toggleAutoDetonation,
+    updateFuse
   })
 }
 

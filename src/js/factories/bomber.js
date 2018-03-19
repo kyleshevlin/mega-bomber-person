@@ -1,4 +1,6 @@
-const bomberFactory = entity => {
+import bombFactory from './bomb'
+
+const bomberFactory = bomber => {
   const state = {
     bombs: {
       count: 1,
@@ -12,12 +14,14 @@ const bomberFactory = entity => {
 
   const dropBomb = () => {
     if (state.bombs.count > 0) {
-      console.log(`A bomb as dropped at coordinates: ${entity.x}, ${entity.y}`)
+      const bomb = bombFactory(bomber)
+      bomb.plant()
       state.bombs.count--
-      // This will be made better
-      setTimeout(() => {
-        replenishBomb()
-      }, 3000)
+
+      console.log(
+        'A bomb as dropped at coordinates: ' +
+          `${bomber.position.x}, ${bomber.position.y}`
+      )
     }
   }
 
