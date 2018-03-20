@@ -17,3 +17,10 @@ export const collision = a => b =>
     noALeftBRightCollision(a)(b) ||
     noATopBBottomCollision(a)(b)
   )
+
+export const timestamp = () =>
+  window.performance && window.performance.now
+    ? window.performance.now()
+    : new Date().getTime()
+
+export const bound = (value, min, max) => Math.max(min, Math.min(value, max))

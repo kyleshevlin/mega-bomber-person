@@ -1,4 +1,4 @@
-const drawPlayer = (context, player) => {
+const renderPlayer = (context, player) => {
   context.fillStyle = player.background
   context.fillRect(
     player.position.x,
@@ -8,4 +8,4 @@ const drawPlayer = (context, player) => {
   )
 }
 
-export default drawPlayer
+export default renderPlayer

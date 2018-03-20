@@ -1,6 +1,6 @@
-import { CELL_SIZE } from './constants'
+import { CELL_SIZE, STEP } from './constants'
 import { keys, addKeyListeners } from './shared/keys'
-import { compose, collision } from './utils'
+import { compose, collision, timestamp } from './utils'
 import playerFactory from './factories/player'
 import drawBackground from './draws/background'
 import drawGrid from './draws/grid'
@@ -129,13 +129,15 @@ const gridCollision = grid => player => {
 
 const playerCollisions = compose(gridCollision(grid), edgeCollision)
 
-function update() {
+const update = step => {
   // Calculate positions
   players.forEach(playerActions)
 
   // Calculate Collisions
   players.forEach(playerCollisions)
+}
 
+const render = (ctx, counter, dt) => {
   // Draw
   drawBackground(ctx, GRID_WIDTH, GRID_HEIGHT)
   drawGrid(ctx, grid)
@@ -144,8 +146,25 @@ function update() {
   })
 }
 
+let counter = 0
+let dt = 0
+let now
+let last = timestamp()
+
 function loop() {
-  update()
+  now = timestamp()
+
+  // Bind dt to adding no more than 1 second of updates
+  dt = dt + Math.min(1, (now - last) / 1000)
+
+  while (dt > STEP) {
+    dt = dt - STEP
+    update(STEP)
+  }
+
+  render(ctx, counter, dt)
+  last = now
+  counter++
   window.requestAnimationFrame(loop)
 }
 

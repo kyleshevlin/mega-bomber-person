@@ -1,6 +1,6 @@
 import { CELL_SIZE } from '../constants'
 
-const drawGrid = (context, grid) => {
+const renderGrid = (context, grid) => {
   grid.forEach((row, rowIndex) => {
     row.forEach((col, colIndex) => {
       switch (col) {
@@ -28,4 +28,4 @@ const drawGrid = (context, grid) => {
   })
 }
 
-export default drawGrid
+export default renderGrid
