@@ -1,5 +1,6 @@
 import { CELL_SIZE } from './constants'
 import { keys, addKeyListeners } from './shared/keys'
+import { compose, collision } from './utils'
 import playerFactory from './factories/player'
 import drawBackground from './draws/background'
 import drawGrid from './draws/grid'
@@ -54,12 +55,6 @@ const playerActions = player => {
   }
 }
 
-const collision = box1 => box2 =>
-  box1.x < box2.x + box2.width &&
-  box1.x + box1.width > box2.x &&
-  box1.y < box2.y + box2.height &&
-  box1.y + box1.height > box2.y
-
 const edgeCollision = player => {
   const { height, width, position: { x, y } } = player
   const edge = { x: 0, y: 0, width: GRID_WIDTH, height: GRID_HEIGHT }
@@ -77,11 +72,11 @@ const edgeCollision = player => {
     }
 
     if (x + width > GRID_WIDTH) {
-      xPos = GRID_WIDTH
+      xPos = GRID_WIDTH - width
     }
 
     if (y + height > GRID_HEIGHT) {
-      yPos = GRID_HEIGHT
+      yPos = GRID_HEIGHT - height
     }
 
     player.reposition(xPos, yPos)
@@ -90,9 +85,10 @@ const edgeCollision = player => {
   return player
 }
 
-const gridCollision = (grid, player) => {
+const gridCollision = grid => player => {
   const { height, width, position: { x, y } } = player
-  const playerCollision = collision({ height, width, x, y })
+  const slimPlayer = { height, width, x, y }
+  const playerCollision = collision(slimPlayer)
 
   let rowIndex = -1
   let colIndex = -1
@@ -131,16 +127,14 @@ const gridCollision = (grid, player) => {
   return player
 }
 
+const playerCollisions = compose(gridCollision(grid), edgeCollision)
+
 function update() {
   // Calculate positions
   players.forEach(playerActions)
 
   // Calculate Collisions
-  players.forEach(player => {
-    gridCollision(grid, edgeCollision(player))
-  })
-
-  // Adjust in response to collisions
+  players.forEach(playerCollisions)
 
   // Draw
   drawBackground(ctx, GRID_WIDTH, GRID_HEIGHT)
