@@ -10,11 +10,13 @@ const bombFactory = bomber => {
 
   const detonate = () => {
     console.log('Boom 💥')
+    // logic here to handle blast radius
     bomber.replenishBomb()
   }
 
   const plant = () => {
     if (state.autoDetonate) {
+      // logic here to add bomb to game and position it
       setTimeout(() => {
         detonate()
       }, state.fuse)
