@@ -2,9 +2,9 @@ import { CELL_SIZE, STEP } from './constants'
 import { keys, addKeyListeners } from './shared/keys'
 import { compose, collision, timestamp } from './utils'
 import playerFactory from './factories/player'
-import drawBackground from './draws/background'
-import drawGrid from './draws/grid'
-import drawPlayer from './draws/player'
+import renderBackground from './renders/background'
+import renderGrid from './renders/grid'
+import renderPlayer from './renders/player'
 
 const canvas = document.getElementById('game')
 const ctx = canvas.getContext('2d')
@@ -139,10 +139,10 @@ const update = step => {
 
 const render = (ctx, counter, dt) => {
   // Draw
-  drawBackground(ctx, GRID_WIDTH, GRID_HEIGHT)
-  drawGrid(ctx, grid)
+  renderBackground(ctx, GRID_WIDTH, GRID_HEIGHT)
+  renderGrid(ctx, grid)
   players.forEach(player => {
-    drawPlayer(ctx, player)
+    renderPlayer(ctx, player)
   })
 }
 
