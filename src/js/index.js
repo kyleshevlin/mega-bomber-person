@@ -13,9 +13,9 @@ const grid = [
   [' ', ' ', 'c', 'c', 'c', 'c', 'c', ' ', ' '],
   [' ', 'x', ' ', 'x', ' ', 'x', ' ', 'x', ' '],
   ['c', ' ', 'c', ' ', 'c', ' ', 'c', ' ', 'c'],
-  ['c', 'x', 'c', 'x', 'c', 'x', 'c', 'x', 'c'],
-  ['c', ' ', 'c', ' ', 'c', ' ', 'c', ' ', 'c'],
-  ['c', 'x', 'c', 'x', 'c', 'x', 'c', 'x', 'c'],
+  ['c', 'x', 'c', 'x', 'c', 'x', ' ', 'x', 'c'],
+  ['c', ' ', 'c', ' ', ' ', ' ', 'c', ' ', 'c'],
+  ['c', 'x', ' ', 'x', 'c', 'x', 'c', 'x', 'c'],
   ['c', ' ', 'c', ' ', 'c', ' ', 'c', ' ', 'c'],
   [' ', 'x', ' ', 'x', ' ', 'x', ' ', 'x', ' '],
   [' ', ' ', 'c', 'c', 'c', 'c', 'c', ' ', ' ']
@@ -105,8 +105,8 @@ const gridCollision = grid => player => {
         return playerCollision({
           height: CELL_SIZE,
           width: CELL_SIZE,
-          x: rowIndex * CELL_SIZE,
-          y: colIndex * CELL_SIZE
+          x: colIndex * CELL_SIZE,
+          y: rowIndex * CELL_SIZE
         })
       }
     })
@@ -116,8 +116,8 @@ const gridCollision = grid => player => {
     const box = {
       height: CELL_SIZE,
       width: CELL_SIZE,
-      x: rowIndex * CELL_SIZE,
-      y: colIndex * CELL_SIZE
+      x: colIndex * CELL_SIZE,
+      y: rowIndex * CELL_SIZE
     }
 
     console.log('box', box)

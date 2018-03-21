@@ -18,8 +18,8 @@ const renderGrid = (context, grid) => {
 
       if (col !== ' ') {
         context.fillRect(
-          rowIndex * CELL_SIZE,
           colIndex * CELL_SIZE,
+          rowIndex * CELL_SIZE,
           CELL_SIZE,
           CELL_SIZE
         )
