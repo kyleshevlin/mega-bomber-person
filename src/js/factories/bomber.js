@@ -1,6 +1,6 @@
 import bombFactory from './bomb'
 
-const bomberFactory = bomber => {
+const bomberFactory = entity => {
   const state = {
     bombs: {
       count: 1,
@@ -10,17 +10,18 @@ const bomberFactory = bomber => {
 
   const incrementBombMax = () => {
     state.bombs.max++
+    state.bombs.count++
   }
 
   const dropBomb = () => {
     if (state.bombs.count > 0) {
-      const bomb = bombFactory(bomber)
+      const bomb = bombFactory(entity)
       bomb.plant()
       state.bombs.count--
 
       console.log(
         'A bomb as dropped at coordinates: ' +
-          `${bomber.position.x}, ${bomber.position.y}`
+          `${entity.position.x}, ${entity.position.y}`
       )
     }
   }

@@ -31,4 +31,11 @@ describe('Bomber', () => {
     bomber.replenishBomb()
     expect(bomber.bombs.count).toEqual(1)
   })
+
+  it('incrementBombMax', () => {
+    bomber.incrementBombMax()
+
+    expect(bomber.bombs.count).toEqual(2)
+    expect(bomber.bombs.max).toEqual(2)
+  })
 })
