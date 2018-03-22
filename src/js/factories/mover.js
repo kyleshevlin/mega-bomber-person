@@ -1,49 +1,39 @@
 import { isNothing } from '../utils'
 
-const moverFactory = (options = {}) => {
-  const { velocity = 1, x = 0, y = 0 } = options
+export default function moverFactory(options = {}) {
+  const { speed = 1, x = 0, y = 0 } = options
 
-  const state = {
+  return {
     position: {
       x,
       y
     },
-    velocity
-  }
+    speed,
 
-  const moveLeft = () => {
-    state.position.x -= state.velocity
-  }
+    moveLeft() {
+      this.position.x -= this.speed
+    },
 
-  const moveRight = () => {
-    state.position.x += state.velocity
-  }
+    moveRight() {
+      this.position.x += this.speed
+    },
 
-  const moveUp = () => {
-    state.position.y -= state.velocity
-  }
+    moveUp() {
+      this.position.y -= this.speed
+    },
 
-  const moveDown = () => {
-    state.position.y += state.velocity
-  }
+    moveDown() {
+      this.position.y += this.speed
+    },
 
-  const reposition = (x, y) => {
-    if (!isNothing(x)) {
-      state.position.x = x
+    reposition(x, y) {
+      if (!isNothing(x)) {
+        this.position.x = x
+      }
+
+      if (!isNothing(y)) {
+        this.position.y = y
+      }
     }
-
-    if (!isNothing(y)) {
-      state.position.y = y
-    }
   }
-
-  return Object.assign(state, {
-    moveLeft,
-    moveRight,
-    moveUp,
-    moveDown,
-    reposition
-  })
 }
-
-export default moverFactory

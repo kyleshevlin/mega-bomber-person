@@ -18,7 +18,7 @@ describe('Mover', () => {
     expect(startingX).toEqual(0)
 
     mover.moveLeft()
-    expect(mover.position.x).toEqual(startingX - mover.velocity)
+    expect(mover.position.x).toEqual(startingX - mover.speed)
   })
 
   it('moveUp', () => {
@@ -27,7 +27,7 @@ describe('Mover', () => {
     expect(startingY).toEqual(0)
 
     mover.moveUp()
-    expect(mover.position.y).toEqual(startingY - mover.velocity)
+    expect(mover.position.y).toEqual(startingY - mover.speed)
   })
 
   it('moveRight', () => {
@@ -36,7 +36,7 @@ describe('Mover', () => {
     expect(startingX).toEqual(0)
 
     mover.moveRight()
-    expect(mover.position.x).toEqual(startingX + mover.velocity)
+    expect(mover.position.x).toEqual(startingX + mover.speed)
   })
 
   it('moveDown', () => {
@@ -45,7 +45,7 @@ describe('Mover', () => {
     expect(startingY).toEqual(0)
 
     mover.moveDown()
-    expect(mover.position.y).toEqual(startingY + mover.velocity)
+    expect(mover.position.y).toEqual(startingY + mover.speed)
   })
 
   it('reposition', () => {
