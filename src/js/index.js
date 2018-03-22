@@ -87,41 +87,31 @@ const edgeCollision = player => {
 
 const gridCollision = grid => player => {
   const { height, width, position: { x, y } } = player
-  const slimPlayer = { height, width, x, y }
-  const playerCollision = collision(slimPlayer)
 
-  let rowIndex = -1
-  let colIndex = -1
-  const hasCollision = grid.some(row => {
-    rowIndex++
-    colIndex = -1
+  const leftIndex = Math.floor(x / CELL_SIZE)
+  const rightIndex = Math.floor((x + width) / CELL_SIZE)
+  const topIndex = Math.floor(y / CELL_SIZE)
+  const bottomIndex = Math.floor((y + height) / CELL_SIZE)
 
-    return row.some(col => {
-      colIndex++
+  let i
+  let j
+  let tile
+  let collision = false
 
-      if (grid[rowIndex][colIndex] === ' ') {
-        return false
-      } else {
-        return playerCollision({
-          height: CELL_SIZE,
-          width: CELL_SIZE,
-          x: colIndex * CELL_SIZE,
-          y: rowIndex * CELL_SIZE
-        })
+  for (i = leftIndex; i <= rightIndex; i++) {
+    for (j = topIndex; j <= bottomIndex; j++) {
+      tile = grid[i][j]
+
+      if (tile !== ' ') {
+        collision = true
       }
-    })
-  })
-
-  if (hasCollision) {
-    const box = {
-      height: CELL_SIZE,
-      width: CELL_SIZE,
-      x: colIndex * CELL_SIZE,
-      y: rowIndex * CELL_SIZE
     }
+  }
 
-    console.log('box', box)
-    console.log('player', { height, width, x, y })
+  if (collision) {
+    console.log(leftIndex, topIndex, rightIndex, bottomIndex)
+    console.log(tile)
+    console.log(player)
   }
 
   return player
