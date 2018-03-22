@@ -3,24 +3,37 @@ import bomberFactory from './bomber'
 import liverFactory from './liver'
 import moverFactory from './mover'
 
-const PLAYER_SIZE = CELL_SIZE - 10
+const PLAYER_SIZE = CELL_SIZE - 4
 
-const playerFactory = (options = {}) => {
-  const { name, speed = 3, x = 0, y = 0 } = options
+const defaultOptions = {
+  background: 'red',
+  name: '',
+  speed: 3,
+  x: 0,
+  y: 0
+}
 
-  const state = {
-    background: 'red',
+export default function playerFactory(options = {}) {
+  const { background, name, speed, x, y } = Object.assign(
+    {},
+    defaultOptions,
+    options
+  )
+
+  const player = {
+    background,
     height: PLAYER_SIZE,
     name,
-    width: PLAYER_SIZE
+    speed,
+    width: PLAYER_SIZE,
+    x,
+    y
   }
 
   return Object.assign(
-    state,
-    liverFactory({}),
-    moverFactory({ speed, x, y }),
-    bomberFactory(state)
+    player,
+    liverFactory(),
+    moverFactory(player),
+    bomberFactory(player)
   )
 }
-
-export default playerFactory
