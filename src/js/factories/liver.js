@@ -1,36 +1,32 @@
-const liverFactory = (options = {}) => {
+export default function liverFactory(options = {}) {
   const { health = 3 } = options
 
-  const state = {
+  return {
     alive: true,
-    health
-  }
+    health,
 
-  const incrementHealth = () => {
-    state.health++
+    incrementHealth() {
+      this.health++
 
-    if (!state.alive && state.health > 0) {
-      revive()
+      if (!this.alive && this.health > 0) {
+        this.revive()
+      }
+    },
+
+    decrementHealth() {
+      this.health--
+
+      if (this.health === 0) {
+        this.die()
+      }
+    },
+
+    die() {
+      this.alive = false
+    },
+
+    revive() {
+      this.alive = true
     }
   }
-
-  const decrementHealth = () => {
-    state.health--
-
-    if (state.health === 0) {
-      die()
-    }
-  }
-
-  const die = () => {
-    state.alive = false
-  }
-
-  const revive = () => {
-    state.alive = true
-  }
-
-  return Object.assign(state, { decrementHealth, die, incrementHealth, revive })
 }
-
-export default liverFactory
