@@ -29,8 +29,14 @@ describe('Bomb', () => {
     expect(bomb.fuse).toEqual(1500)
   })
 
-  it('blast radius', () => {
-    expect(bomb.blastRadius).toEqual(1)
+  describe('blast', () => {
+    it('duration', () => {
+      expect(bomb.blast.duration).toEqual(750)
+    })
+
+    it('radius', () => {
+      expect(bomb.blast.radius).toEqual(1)
+    })
   })
 
   it('detonate', () => {
@@ -39,12 +45,12 @@ describe('Bomb', () => {
 
   it('decrementBlastRadius', () => {
     bomb.decrementBlastRadius()
-    expect(bomb.blastRadius).toEqual(0)
+    expect(bomb.blast.radius).toEqual(0)
   })
 
   it('incrementBlastRadius', () => {
     bomb.incrementBlastRadius()
-    expect(bomb.blastRadius).toEqual(2)
+    expect(bomb.blast.radius).toEqual(2)
   })
 
   describe('plant', () => {

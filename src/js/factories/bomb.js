@@ -1,52 +1,44 @@
-const bombFactory = bomber => {
-  const state = {
+import { CELL_SIZE } from '../constants'
+
+export default function bombFactory(bomber) {
+  return {
     autoDetonate: true,
     background: 'black',
-    blastRadius: 1,
+    blast: {
+      duration: 750,
+      radius: 1
+    },
     fuse: 3000,
-    height: 20,
-    width: 20
-  }
+    height: CELL_SIZE,
+    width: CELL_SIZE,
 
-  const detonate = () => {
-    console.log('Boom 💥')
-    // logic here to handle blast radius
-    bomber.replenishBomb()
-  }
+    detonate() {
+      console.log('Boom 💥')
+      // logic here to handle blast radius
+      bomber.replenishBomb()
+    },
 
-  const plant = () => {
-    if (state.autoDetonate) {
-      // logic here to add bomb to game and position it
-      setTimeout(() => {
-        detonate()
-      }, state.fuse)
+    plant() {
+      if (this.autoDetonate) {
+        // logic here to add bomb to game and position it
+        setTimeout(this.detonate, this.fuse)
+      }
+    },
+
+    decrementBlastRadius() {
+      this.blast.radius--
+    },
+
+    incrementBlastRadius() {
+      this.blast.radius++
+    },
+
+    toggleAutoDetonation() {
+      this.autoDetonate = !this.autoDetonate
+    },
+
+    updateFuse(time) {
+      this.fuse = time
     }
   }
-
-  const decrementBlastRadius = () => {
-    state.blastRadius--
-  }
-
-  const incrementBlastRadius = () => {
-    state.blastRadius++
-  }
-
-  const toggleAutoDetonation = () => {
-    state.autoDetonate = !state.autoDetonate
-  }
-
-  const updateFuse = time => {
-    state.fuse = time
-  }
-
-  return Object.assign(state, {
-    decrementBlastRadius,
-    detonate,
-    incrementBlastRadius,
-    plant,
-    toggleAutoDetonation,
-    updateFuse
-  })
 }
-
-export default bombFactory
