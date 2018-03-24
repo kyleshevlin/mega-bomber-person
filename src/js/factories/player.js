@@ -2,6 +2,7 @@ import { PLAYER_SIZE } from '../constants'
 import bomberFactory from './bomber'
 import liverFactory from './liver'
 import moverFactory from './mover'
+import toucherFactory from './toucher'
 
 const defaultOptions = {
   background: 'blue',
@@ -31,6 +32,7 @@ export default function playerFactory(options = {}) {
   return Object.assign(
     player,
     liverFactory(),
+    toucherFactory(player),
     moverFactory(player),
     bomberFactory(player)
   )

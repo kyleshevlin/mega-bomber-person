@@ -19,8 +19,7 @@ export default function bomberFactory(entity) {
         this.bombs.count--
 
         console.log(
-          'A bomb as dropped at coordinates: ' +
-            `${entity.position.x}, ${entity.position.y}`
+          'A bomb as dropped at coordinates: ' + `${entity.x}, ${entity.y}`
         )
       }
     },

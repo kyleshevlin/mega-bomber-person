@@ -8,7 +8,7 @@ describe('Mover', () => {
   })
 
   it('should have a default starting point of 0, 0', () => {
-    expect(mover.position.x).toEqual(0)
-    expect(mover.position.y).toEqual(0)
+    expect(mover.x).toEqual(0)
+    expect(mover.y).toEqual(0)
   })
 })

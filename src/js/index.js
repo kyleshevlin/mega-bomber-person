@@ -76,4 +76,6 @@ function loop() {
 
 loop()
 
+// Helps with debugging
 window.player = player
+window.grid = grid

@@ -16,3 +16,5 @@ export const timestamp = () =>
 export const bound = (value, min, max) => Math.max(min, Math.min(value, max))
 
 export const tileToPixel = tile => tile * CELL_SIZE
+
+export const pixelToTile = pixel => Math.floor(pixel / CELL_SIZE)
