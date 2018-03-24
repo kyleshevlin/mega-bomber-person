@@ -1,9 +1,5 @@
 import {
   isNothing,
-  noARightBLeftCollision,
-  noABottomBTopCollision,
-  noALeftBRightCollision,
-  noATopBBottomCollision,
   collision
 } from '../../src/js/utils'
 
@@ -18,58 +14,6 @@ const boxFactory = (x, y, width, height) => ({
   y,
   width,
   height
-})
-
-describe('noARightBLeftCollision', () => {
-  const box1 = boxFactory(0, 0, 20, 20)
-  const box1Collision = noARightBLeftCollision(box1)
-
-  it('no collision', () => {
-    expect(box1Collision(boxFactory(30, 0, 20, 20))).toEqual(true)
-  })
-
-  it('collision', () => {
-    expect(box1Collision(boxFactory(10, 0, 20, 20))).toEqual(false)
-  })
-})
-
-describe('noALeftBRightCollision', () => {
-  const box1 = boxFactory(0, 0, 20, 20)
-  const box1Collision = noALeftBRightCollision(box1)
-
-  it('no collision', () => {
-    expect(box1Collision(boxFactory(-30, 0, 20, 20))).toEqual(true)
-  })
-
-  it('collision', () => {
-    expect(box1Collision(boxFactory(-10, 0, 20, 20))).toEqual(false)
-  })
-})
-
-describe('noABottomBTopCollision', () => {
-  const box1 = boxFactory(0, 0, 20, 20)
-  const box1Collision = noABottomBTopCollision(box1)
-
-  it('no collision', () => {
-    expect(box1Collision(boxFactory(0, 30, 20, 20))).toEqual(true)
-  })
-
-  it('collision', () => {
-    expect(box1Collision(boxFactory(0, 10, 20, 20))).toEqual(false)
-  })
-})
-
-describe('noATopBBottomCollision', () => {
-  const box1 = boxFactory(0, 0, 20, 20)
-  const box1Collision = noATopBBottomCollision(box1)
-
-  it('no collision', () => {
-    expect(box1Collision(boxFactory(0, -30, 20, 20))).toEqual(true)
-  })
-
-  it('collision', () => {
-    expect(box1Collision(boxFactory(0, -10, 20, 20))).toEqual(false)
-  })
 })
 
 describe('collision', () => {

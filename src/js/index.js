@@ -1,6 +1,6 @@
 import { CELL_SIZE, STEP } from './constants'
 import { keys, addKeyListeners } from './shared/keys'
-import { compose, collision, timestamp } from './utils'
+import { timestamp } from './utils'
 import playerFactory from './factories/player'
 import renderBackground from './renders/background'
 import renderGrid from './renders/grid'
@@ -11,7 +11,7 @@ const ctx = canvas.getContext('2d')
 
 const grid = [
   [' ', ' ', 'c', 'c', 'c', 'c', 'c', ' ', ' '],
-  [' ', 'x', ' ', 'x', ' ', 'x', ' ', 'x', ' '],
+  [' ', ' ', ' ', 'x', ' ', 'x', ' ', 'x', ' '],
   ['c', ' ', 'c', ' ', 'c', ' ', 'c', ' ', 'c'],
   ['c', 'x', 'c', 'x', 'c', 'x', ' ', 'x', 'c'],
   ['c', ' ', 'c', ' ', ' ', ' ', 'c', ' ', 'c'],
@@ -27,116 +27,33 @@ const GRID_HEIGHT = CELL_SIZE * grid[0].length
 canvas.width = GRID_WIDTH
 canvas.height = GRID_HEIGHT
 
-const player1 = playerFactory({ name: 'Player 1' })
-const players = [player1]
+const player = playerFactory({ name: 'Player' })
 
 // Event Listeners
 addKeyListeners()
 
 const playerActions = player => {
-  if (keys.left.pressed) {
-    player.moveLeft()
-  }
-
-  if (keys.down.pressed) {
-    player.moveDown()
-  }
-
-  if (keys.right.pressed) {
-    player.moveRight()
-  }
-
-  if (keys.up.pressed) {
-    player.moveUp()
-  }
+  player.input.left = keys.left.pressed
+  player.input.right = keys.right.pressed
+  player.input.up = keys.up.pressed
+  player.input.down = keys.down.pressed
 
   if (keys.spacebar.pressed) {
     player.dropBomb()
   }
 }
 
-const edgeCollision = player => {
-  const { height, width, position: { x, y } } = player
-  const edge = { x: 0, y: 0, width: GRID_WIDTH, height: GRID_HEIGHT }
-
-  if (collision({ height, width, x, y })(edge)) {
-    let xPos
-    let yPos
-
-    if (x < 0) {
-      xPos = 0
-    }
-
-    if (y < 0) {
-      yPos = 0
-    }
-
-    if (x + width > GRID_WIDTH) {
-      xPos = GRID_WIDTH - width
-    }
-
-    if (y + height > GRID_HEIGHT) {
-      yPos = GRID_HEIGHT - height
-    }
-
-    player.reposition(xPos, yPos)
-  }
-
-  return player
-}
-
-const gridCollision = grid => player => {
-  const { height, width, position: { x, y } } = player
-
-  const leftIndex = Math.floor(x / CELL_SIZE)
-  const rightIndex = Math.floor((x + width) / CELL_SIZE)
-  const topIndex = Math.floor(y / CELL_SIZE)
-  const bottomIndex = Math.floor((y + height) / CELL_SIZE)
-
-  let i
-  let j
-  let tile
-  let collision = false
-
-  for (i = leftIndex; i <= rightIndex; i++) {
-    for (j = topIndex; j <= bottomIndex; j++) {
-      tile = grid[i][j]
-
-      if (tile !== ' ') {
-        collision = true
-      }
-    }
-  }
-
-  if (collision) {
-    console.log(leftIndex, topIndex, rightIndex, bottomIndex)
-    console.log(tile)
-    console.log(player)
-  }
-
-  return player
-}
-
-const playerCollisions = compose(gridCollision(grid), edgeCollision)
-
 const update = step => {
-  // Calculate positions
-  players.forEach(playerActions)
-
-  // Calculate Collisions
-  players.forEach(playerCollisions)
+  playerActions(player)
+  player.update(grid, step)
 }
 
-const render = (ctx, counter, dt) => {
-  // Draw
+const render = (ctx, dt) => {
   renderBackground(ctx, GRID_WIDTH, GRID_HEIGHT)
   renderGrid(ctx, grid)
-  players.forEach(player => {
-    renderPlayer(ctx, player)
-  })
+  renderPlayer(ctx, player)
 }
 
-let counter = 0
 let dt = 0
 let now
 let last = timestamp()
@@ -152,10 +69,11 @@ function loop() {
     update(STEP)
   }
 
-  render(ctx, counter, dt)
+  render(ctx, dt)
   last = now
-  counter++
   window.requestAnimationFrame(loop)
 }
 
 loop()
+
+window.player = player

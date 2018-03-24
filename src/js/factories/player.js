@@ -1,12 +1,10 @@
-import { CELL_SIZE } from '../constants'
+import { PLAYER_SIZE } from '../constants'
 import bomberFactory from './bomber'
 import liverFactory from './liver'
 import moverFactory from './mover'
 
-const PLAYER_SIZE = CELL_SIZE - 4
-
 const defaultOptions = {
-  background: 'red',
+  background: 'blue',
   name: '',
   speed: 3,
   x: 0,
