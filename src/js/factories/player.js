@@ -2,12 +2,10 @@ import { PLAYER_SIZE } from '../constants'
 import bomberFactory from './bomber'
 import liverFactory from './liver'
 import moverFactory from './mover'
-import toucherFactory from './toucher'
 
 const defaultOptions = {
   background: 'blue',
   name: '',
-  speed: 3,
   x: 0,
   y: 0
 }
@@ -24,6 +22,9 @@ export default function playerFactory(options = {}) {
     height: PLAYER_SIZE,
     name,
     speed,
+    update(grid) {
+      this.moveUpdate(grid)
+    },
     width: PLAYER_SIZE,
     x,
     y
@@ -32,7 +33,6 @@ export default function playerFactory(options = {}) {
   return Object.assign(
     player,
     liverFactory(),
-    toucherFactory(player),
     moverFactory(player),
     bomberFactory(player)
   )

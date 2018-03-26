@@ -1,8 +1,8 @@
 import { ACCEL, CELL_SIZE, FRICTION } from '../constants'
-import { tileToPixel } from '../utils'
+import { bound, pixelToTile, tileToPixel } from '../utils'
 
 export default function moverFactory(entity) {
-  const { speed = 10, x = 0, y = 0 } = entity
+  const { speed = 3, x = 0, y = 0 } = entity
 
   return {
     accel: ACCEL,
@@ -19,34 +19,37 @@ export default function moverFactory(entity) {
     y,
     speed,
 
-    update(grid) {
+    moveUpdate(grid) {
       const wasMovingLeft = this.vx < 0
       const wasMovingRight = this.vx > 0
       const wasMovingUp = this.vy < 0
       const wasMovingDown = this.vy > 0
 
+      const clamp = value =>
+        Math.abs(value) > 0.01 ? value * this.friction : 0
+
       if (this.input.left) {
         this.vx = -Math.min(Math.abs(this.vx) + this.accel, this.speed)
       } else if (wasMovingLeft) {
-        this.vx = this.vx > 0.005 ? this.vx * this.friction : 0
+        this.vx = clamp(this.vx)
       }
 
       if (this.input.right) {
         this.vx = Math.min(this.vx + this.accel, this.speed)
       } else if (wasMovingRight) {
-        this.vx = this.vx > 0.005 ? this.vx * this.friction : 0
+        this.vx = clamp(this.vx)
       }
 
       if (this.input.up) {
         this.vy = -Math.min(Math.abs(this.vy) + this.accel, this.speed)
       } else if (wasMovingUp) {
-        this.vy = this.vy > 0.005 ? this.vy * this.friction : 0
+        this.vy = clamp(this.vy)
       }
 
       if (this.input.down) {
         this.vy = Math.min(this.vy + this.accel, this.speed)
       } else if (wasMovingDown) {
-        this.vy = this.vy > 0.005 ? this.vy * this.friction : 0
+        this.vy = clamp(this.vy)
       }
 
       if ((wasMovingLeft && this.vx > 0) || (wasMovingRight && this.vx < 0)) {
@@ -57,8 +60,11 @@ export default function moverFactory(entity) {
         this.vy = 0
       }
 
+      // Step - Move Player based on velocity
       this.x = this.x + this.vx
       this.y = this.y + this.vy
+
+      // Collision Detection
 
       // Edges
       if (this.x < 0) {
@@ -77,36 +83,41 @@ export default function moverFactory(entity) {
         this.vy = 0
       }
 
-      const row = Math.floor(this.y / CELL_SIZE)
-      const col = Math.floor(this.x / CELL_SIZE)
-
-      // This is useful because if it is 0
-      // then it can be used as a false value,
-      // It also might be useful in determining how
-      // to reposition the this before rendering
+      // Grid Collisions
+      const row = bound(pixelToTile(this.y), 0, grid.length)
+      const col = bound(pixelToTile(this.x), 0, grid[0].length)
       const xRemainder = this.x % CELL_SIZE
       const yRemainder = this.y % CELL_SIZE
 
-      const cell = grid[row][col]
-      const cellRight = grid[row][col + 1]
-      const cellDown = grid[row + 1][col]
-      const cellDiagonal = grid[row + 1][col + 1]
+      const checkGrid = (row, col) => {
+        let value
 
-      const collision = tile => tile !== ' '
+        try {
+          value = grid[row][col]
+        } catch (err) {
+          value = 'x' // a non-empty cell, treat it like
+        }
+
+        return value
+      }
+
+      const cell = checkGrid(row, col)
+      const cellRight = checkGrid(row, col + 1)
+      const cellDown = checkGrid(row + 1, col)
+      const cellDiagonal = checkGrid(row + 1, col + 1)
+
+      const nonEmptyCell = tile => tile !== ' '
 
       if (this.vx > 0) {
         if (
-          (collision(cellRight) && !collision(cell)) ||
-          (collision(cellDiagonal) && !collision(cellDown) && yRemainder)
+          nonEmptyCell(cellRight) ||
+          (nonEmptyCell(cellDiagonal) && yRemainder)
         ) {
           this.x = tileToPixel(col)
           this.vx = 0
         }
       } else if (this.vx < 0) {
-        if (
-          (collision(cell) && !collision(cellRight)) ||
-          (collision(cellDown) && !collision(cellDiagonal) && yRemainder)
-        ) {
+        if (nonEmptyCell(cell) || (nonEmptyCell(cellDown) && yRemainder)) {
           this.x = tileToPixel(col + 1)
           this.vx = 0
         }
@@ -114,17 +125,14 @@ export default function moverFactory(entity) {
 
       if (this.vy > 0) {
         if (
-          (collision(cellDown) && !collision(cell)) ||
-          (collision(cellDiagonal) && !collision(cellRight) && xRemainder)
+          nonEmptyCell(cellDown) ||
+          (nonEmptyCell(cellDiagonal) && xRemainder)
         ) {
           this.y = tileToPixel(row)
           this.vy = 0
         }
       } else if (this.vy < 0) {
-        if (
-          (collision(cell) && !collision(cellDown)) ||
-          (collision(cellRight) && !collision(cellDiagonal) && xRemainder)
-        ) {
+        if (nonEmptyCell(cell) || (nonEmptyCell(cellRight) && xRemainder)) {
           this.y = tileToPixel(row + 1)
           this.vy = 0
         }

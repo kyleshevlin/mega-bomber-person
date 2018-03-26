@@ -8,6 +8,10 @@ const renderGrid = (context, grid) => {
           context.fillStyle = 'tan'
           break
 
+        case 'u':
+          context.fillStyle = 'rebeccapurple'
+          break
+
         case 'x':
           context.fillStyle = 'gray'
           break
