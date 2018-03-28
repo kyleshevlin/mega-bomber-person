@@ -1,4 +1,4 @@
-import { LEVEL_CHARS } from '../constants'
+import { LEVEL_CHARACTERS } from '../constants'
 
 export default function levelFactory(plan) {
   const planArray = plan
@@ -12,13 +12,13 @@ export default function levelFactory(plan) {
 
   const rows = planArray.map((row, y) =>
     row.map((ch, x) => {
-      const type = LEVEL_CHARS[ch]
+      const type = LEVEL_CHARACTERS[ch]
 
       if (typeof type === 'string') {
         return type
       }
 
-      this.startActors.push(type({ x, y }))
+      startActors.push(type({ x, y }))
 
       return 'empty'
     })

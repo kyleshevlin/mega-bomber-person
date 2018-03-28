@@ -1,4 +1,4 @@
-import { ACCEL, CELL_SIZE, FRICTION } from '../constants'
+import { ACCEL, SCALE, FRICTION } from '../constants'
 import { bound, pixelToTile, tileToPixel } from '../utils'
 
 export default function moverFactory(entity) {
@@ -70,24 +70,24 @@ export default function moverFactory(entity) {
       if (this.x < 0) {
         this.x = 0
         this.vx = 0
-      } else if (this.x + this.width > grid.length * CELL_SIZE) {
-        this.x = grid.length * CELL_SIZE - this.width
+      } else if (this.x + this.width > grid.width * SCALE) {
+        this.x = grid.width * SCALE - this.width
         this.vx = 0
       }
 
       if (this.y < 0) {
         this.y = 0
         this.vy = 0
-      } else if (this.y + this.height > grid[0].length * CELL_SIZE) {
-        this.y = grid[0].length * CELL_SIZE - this.height
+      } else if (this.y + this.height > grid.height * SCALE) {
+        this.y = grid.height * SCALE - this.height
         this.vy = 0
       }
 
       // Grid Collisions
-      const row = bound(pixelToTile(this.y), 0, grid.length)
-      const col = bound(pixelToTile(this.x), 0, grid[0].length)
-      const xRemainder = this.x % CELL_SIZE
-      const yRemainder = this.y % CELL_SIZE
+      const row = bound(pixelToTile(this.y), 0, grid.width)
+      const col = bound(pixelToTile(this.x), 0, grid.height)
+      const xRemainder = this.x % SCALE
+      const yRemainder = this.y % SCALE
 
       const checkGrid = (row, col) => {
         let value

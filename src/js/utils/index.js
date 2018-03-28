@@ -1,4 +1,4 @@
-import { CELL_SIZE } from '../constants'
+import { SCALE } from '../constants'
 
 export const isNothing = x => x === null || x === undefined
 
@@ -15,6 +15,6 @@ export const timestamp = () =>
 
 export const bound = (value, min, max) => Math.max(min, Math.min(value, max))
 
-export const tileToPixel = tile => tile * CELL_SIZE
+export const tileToPixel = tile => tile * SCALE
 
-export const pixelToTile = pixel => Math.floor(pixel / CELL_SIZE)
+export const pixelToTile = pixel => Math.floor(pixel / SCALE)

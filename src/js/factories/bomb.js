@@ -1,4 +1,4 @@
-import { CELL_SIZE } from '../constants'
+import { SCALE } from '../constants'
 
 export default function bombFactory(bomber) {
   return {
@@ -9,8 +9,8 @@ export default function bombFactory(bomber) {
       radius: 1
     },
     fuse: 3000,
-    height: CELL_SIZE,
-    width: CELL_SIZE,
+    height: SCALE,
+    width: SCALE,
 
     detonate() {
       console.log('Boom 💥')

@@ -1,9 +1,13 @@
-import { CELL_SIZE } from '../constants'
+import { SCALE } from '../constants'
 
 const renderGrid = (context, grid) => {
-  grid.forEach((row, rowIndex) => {
+  grid.rows.forEach((row, rowIndex) => {
     row.forEach((col, colIndex) => {
       switch (col) {
+        case 'empty':
+          context.fillStyle = 'green'
+          break
+
         case 'c':
           context.fillStyle = 'tan'
           break
@@ -12,7 +16,11 @@ const renderGrid = (context, grid) => {
           context.fillStyle = 'rebeccapurple'
           break
 
-        case 'x':
+        case 'player':
+          context.fillStyle = 'blue'
+          break
+
+        case 'wall':
           context.fillStyle = 'gray'
           break
 
@@ -21,12 +29,7 @@ const renderGrid = (context, grid) => {
       }
 
       if (col !== ' ') {
-        context.fillRect(
-          colIndex * CELL_SIZE,
-          rowIndex * CELL_SIZE,
-          CELL_SIZE,
-          CELL_SIZE
-        )
+        context.fillRect(colIndex * SCALE, rowIndex * SCALE, SCALE, SCALE)
       }
     })
   })
