@@ -1,4 +1,5 @@
 import playerFactory from '../factories/player'
+import combustibleFactory from '../factories/combustible'
 
 export const ACCEL = 0.6
 export const SCALE = 50
@@ -10,17 +11,18 @@ export const STEP = 1 / FPS
 export const LEVEL_CHARACTERS = {
   '@': playerFactory,
   '.': 'empty',
-  '#': 'wall'
+  '#': 'wall',
+  c: combustibleFactory
 }
 
 export const LEVEL_1 = `
 @........
 .#.#.#.#.
-..#...#..
+.c.c.c.c.
 .........
 ....#....
 .........
-..#...#..
+.c.c.c.c.
 .#.#.#.#.
 .........
 `

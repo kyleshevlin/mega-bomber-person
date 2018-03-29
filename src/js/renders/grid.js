@@ -8,18 +8,6 @@ const renderGrid = (context, grid) => {
           context.fillStyle = 'green'
           break
 
-        case 'c':
-          context.fillStyle = 'tan'
-          break
-
-        case 'u':
-          context.fillStyle = 'rebeccapurple'
-          break
-
-        case 'player':
-          context.fillStyle = 'blue'
-          break
-
         case 'wall':
           context.fillStyle = 'gray'
           break
