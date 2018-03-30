@@ -22,6 +22,7 @@ export default function playerFactory(options = {}) {
     height: PLAYER_SIZE,
     name,
     speed,
+    type: 'player',
     update(grid) {
       this.moveUpdate(grid)
     },
